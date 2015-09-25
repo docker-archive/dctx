@@ -1,4 +1,4 @@
-package context
+package dctx
 
 // WithVersion stores the application version in the context. The new context
 // gets a logger to ensure log messages are marked with the application
