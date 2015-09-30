@@ -1,4 +1,4 @@
-// Package context provides several utilities for working with
+// Package dctx provides several utilities for working with
 // golang.org/x/net/context in http requests. Primarily, the focus is on
 // logging relevent request information but this package is not limited to
 // that purpose.
