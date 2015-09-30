@@ -10,7 +10,7 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/docker/dctx"
-	"github.com/docker/distribution/uuid"
+	"github.com/docker/dctx/uuid"
 )
 
 // Common errors used with this package.

@@ -3,7 +3,7 @@ package dctx
 import (
 	"sync"
 
-	"github.com/docker/distribution/uuid"
+	"github.com/docker/dctx/uuid"
 	"golang.org/x/net/context"
 )
 
