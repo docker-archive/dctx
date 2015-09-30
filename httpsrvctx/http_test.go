@@ -1,13 +1,14 @@
-package dctx
+package httpsrvctx
 
 import (
 	"net/http"
 	"net/http/httptest"
 	"net/http/httputil"
 	"net/url"
-	"reflect"
 	"testing"
 	"time"
+
+	"github.com/docker/dctx"
 )
 
 func TestWithRequest(t *testing.T) {
@@ -21,7 +22,7 @@ func TestWithRequest(t *testing.T) {
 	req.Header.Set("Referer", "foo.com/referer")
 	req.Header.Set("User-Agent", "test/0.1")
 
-	ctx := WithRequest(Background(), &req)
+	ctx := WithRequest(dctx.Background(), &req)
 	for _, testcase := range []struct {
 		key      string
 		expected interface{}
@@ -130,7 +131,7 @@ func (trw *testResponseWriter) Flush() {
 
 func TestWithResponseWriter(t *testing.T) {
 	trw := testResponseWriter{}
-	ctx, rw := WithResponseWriter(Background(), &trw)
+	ctx, rw := WithResponseWriter(dctx.Background(), &trw)
 
 	if ctx.Value("http.response") != rw {
 		t.Fatalf("response not available in context: %v != %v", ctx.Value("http.response"), rw)
@@ -176,47 +177,6 @@ func TestWithResponseWriter(t *testing.T) {
 
 	if ctx.Value("http.response.status") != http.StatusBadRequest {
 		t.Fatalf("unexpected response status in context: %v != %v", ctx.Value("http.response.status"), http.StatusBadRequest)
-	}
-}
-
-func TestWithVars(t *testing.T) {
-	var req http.Request
-	vars := map[string]string{
-		"foo": "asdf",
-		"bar": "qwer",
-	}
-
-	getVarsFromRequest = func(r *http.Request) map[string]string {
-		if r != &req {
-			t.Fatalf("unexpected request: %v != %v", r, req)
-		}
-
-		return vars
-	}
-
-	ctx := WithVars(Background(), &req)
-	for _, testcase := range []struct {
-		key      string
-		expected interface{}
-	}{
-		{
-			key:      "vars",
-			expected: vars,
-		},
-		{
-			key:      "vars.foo",
-			expected: "asdf",
-		},
-		{
-			key:      "vars.bar",
-			expected: "qwer",
-		},
-	} {
-		v := ctx.Value(testcase.key)
-
-		if !reflect.DeepEqual(v, testcase.expected) {
-			t.Fatalf("%q: %v != %v", testcase.key, v, testcase.expected)
-		}
 	}
 }
 

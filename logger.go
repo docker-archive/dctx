@@ -37,6 +37,9 @@ type Logger interface {
 	Warn(args ...interface{})
 	Warnf(format string, args ...interface{})
 	Warnln(args ...interface{})
+
+	WithField(key string, value interface{}) *logrus.Entry
+	WithFields(fields logrus.Fields) *logrus.Entry // coupled with logrus
 }
 
 // WithLogger creates a new context with provided logger.
